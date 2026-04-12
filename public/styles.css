@@ -25,6 +25,7 @@ form {
     width : max-content;
     background-color: #67429c;
     border-radius : 10px;
+    padding : 10px;
 }
 
 h1 {
@@ -43,14 +44,13 @@ h1 {
     background-color : #9269c7;
     font-size : 1rem;
     display : block;
-    margin : 15px auto;
+    margin : 10px auto;
     padding : 10px;
 }
 
 .table {
     display : table;
     border-spacing : 10px;
-    padding : 10px;
 }
 
 .error {

@@ -57,12 +57,32 @@ app.post('/sign-up',
             const { firstname, lastname, username, password } = req.body;
             const hashedpassword = await bcrypt.hash(password, 10);
             await queries.createUser(firstname, lastname, username, hashedpassword);
-            res.send('hi');
+            req.login();
+            res.redirect('/');
         }
 })
 
+app.get('/login', (req, res) => {
+    res.render("login", {error : null});
+})
+
+app.post('/login', (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if(err){
+           throw(err);
+        }
+        if(!user){
+            res.render('login', {error : [info.message]})
+        }
+        else{
+            req.login(user, next)
+            res.redirect('/')
+        }
+})(req, res, next);
+})
+
 app.get('/', (req, res) => {
-    res.redirect('/sign-up');
+    res.render("home");
 })
 
 
