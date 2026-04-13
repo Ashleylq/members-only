@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS posts(
   title TEXT,
   content TEXT,
   user_id INTEGER,
-  time TIMESTAMP
+  CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id),
+  time TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 )`
 
 async function main(){

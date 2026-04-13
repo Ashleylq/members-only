@@ -9,13 +9,13 @@
 <body>
     <nav>
         <% if(user){ %>
-            <a class="nav-b">Create Post</a>
+            <a class="nav-b" href="/create">Create Post</a>
             <a class="nav-b" href="/logout">Logout</a>
             <% if(!user.isAdmin){ %>
-                <a class="nav-b">Be an Admin</a>
+                <a class="nav-b" href="/admin">Be an Admin</a>
             <% } %>
             <% if(!user.isMember){ %>
-                <a class="nav-b">Be a Member</a>
+                <a class="nav-b" href="/member">Be a Member</a>
             <% } %>
         <% } %>
         <% if(!user){ %>
@@ -24,5 +24,17 @@
         <% } %>
     </nav>
     <h1>Very Very Secret Club</h1>
+    <% if(posts){ %>
+        <% posts.map((post) => { %>
+            <div class="post">
+                <p class="title"><%= post.title %></p>
+                <p><%= post.content %></p>
+                <% if(user && user.isMember){ %>
+                    <p class="date"><%= post.time.toLocaleString() %></p>
+                    <p class="user"><%= post.user %></p>
+                <% } %>
+            </div>
+        <% }) %>
+    <% } %>
 </body>
 </html>

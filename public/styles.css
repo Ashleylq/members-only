@@ -16,6 +16,13 @@ input {
     display : table-cell;
 }
 
+textarea {
+    background-color : #ecbeff;
+    color : #67429c;
+    font-size : 0.9rem;
+    display : table-cell
+}
+
 label {
     display : table-cell;
 }
@@ -81,4 +88,23 @@ a {
     text-align : center;
     padding-top : 10px;
     padding-bottom : 10px;
+}
+
+.post {
+    background-color : #67429c;
+    padding : 10px;
+    margin : 15px auto;
+    width : 40%;
+    border-radius : 10px;
+}
+
+.title {
+    text-align : center;
+    font-size : 1.2rem;
+    font-weight: bold;;
+}
+
+.date, .user {
+    font-size : 0.8rem;
+    font-weight : lighter
 }

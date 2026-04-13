@@ -15,8 +15,21 @@ async function findById(id){
     return rows[0];
 }
 
+async function createPost(title, content, user_id){
+    await Pool.query(`INSERT INTO posts(title, content, user_id)
+                      VALUES($1, $2, $3)`, [title, content, user_id]);
+}
+
+async function getPosts(){
+    const { rows } = await Pool.query(`SELECT title, content, time, username as user FROM posts
+                                       LEFT JOIN users ON user_id = users.id`);
+    return rows;
+}
+
 module.exports = {
     createUser,
     findByUsername,
-    findById
+    findById,
+    createPost,
+    getPosts
 }

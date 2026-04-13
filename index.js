@@ -15,8 +15,12 @@ app.set("view engine", "ejs");
 app.use(session({
     secret : process.env.SESSION_SECRET,
     resave : false,
-    saveUninitialized : false
+    saveUninitialized : false,
+    cookie : {
+        maxAge : 1000 * 60 * 60 *24
+    }
 }));
+app.use(passport.initialize())
 app.use(passport.session());
 app.use(express.urlencoded({extended : false}));
 app.use(express.static(path.join(__dirname, "public")));
@@ -86,8 +90,19 @@ app.get('/logout', (req, res) => {
     res.redirect('/');
 })
 
-app.get('/', (req, res) => {
-    res.render("home");
+app.get('/create', (req, res) => {
+    res.render("createPost");
+})
+
+app.post('/create', async (req, res) => {
+    const {title, content} = req.body;
+    await queries.createPost(title, content, req.user.id);
+    res.redirect('/');
+})
+
+app.get('/', async (req, res) => {
+    const posts = await queries.getPosts();
+    res.render("home", {posts : posts});
 })
 
 
