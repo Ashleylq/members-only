@@ -21,9 +21,21 @@ async function createPost(title, content, user_id){
 }
 
 async function getPosts(){
-    const { rows } = await Pool.query(`SELECT title, content, time, username as user FROM posts
+    const { rows } = await Pool.query(`SELECT posts.id, title, content, time, username as user FROM posts
                                        LEFT JOIN users ON user_id = users.id`);
     return rows;
+}
+
+async function makeAdmin(id){
+    await Pool.query("UPDATE users SET isAdmin = $2 WHERE id = $1", [id, true]);
+}
+
+async function makeMember(id){
+    await Pool.query("UPDATE users SET isMember = $2 WHERE id = $1", [id, true]);
+}
+
+async function deletePost(id){
+    await Pool.query("DELETE FROM posts WHERE id = $1", [id])
 }
 
 module.exports = {
@@ -31,5 +43,8 @@ module.exports = {
     findByUsername,
     findById,
     createPost,
-    getPosts
+    getPosts,
+    makeAdmin,
+    makeMember,
+    deletePost
 }

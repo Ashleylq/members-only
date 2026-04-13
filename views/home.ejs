@@ -11,10 +11,10 @@
         <% if(user){ %>
             <a class="nav-b" href="/create">Create Post</a>
             <a class="nav-b" href="/logout">Logout</a>
-            <% if(!user.isAdmin){ %>
+            <% if(!user.isadmin){ %>
                 <a class="nav-b" href="/admin">Be an Admin</a>
             <% } %>
-            <% if(!user.isMember){ %>
+            <% if(!user.ismember){ %>
                 <a class="nav-b" href="/member">Be a Member</a>
             <% } %>
         <% } %>
@@ -29,9 +29,14 @@
             <div class="post">
                 <p class="title"><%= post.title %></p>
                 <p><%= post.content %></p>
-                <% if(user && user.isMember){ %>
+                <% if(user && user.ismember){ %>
                     <p class="date"><%= post.time.toLocaleString() %></p>
                     <p class="user"><%= post.user %></p>
+                <% } %>
+                <% if(user && user.isadmin){ %>
+                    <form action="/delete/<%=post.id%>" method="POST">
+                        <button type="submit" class="form-b">Delete Post</button>
+                    </form>
                 <% } %>
             </div>
         <% }) %>

@@ -106,6 +106,41 @@ app.post('/create', async (req, res) => {
     res.redirect('/');
 })
 
+app.get('/admin', (req, res) => {
+    res.render("role", { role : "Admin", action : "Be an Admin", link : "/admin", error : false})
+})
+
+app.post('/admin', async (req, res) => {
+    const { passcode } = req.body
+    if(passcode == process.env.ADMIN_PASSCODE){
+        await queries.makeAdmin(req.user.id)
+        res.redirect('/');
+    }
+    else {
+        res.render("role", {action : "Be an Admin", role : "Admin", link : "/admin", error : true})
+    }
+})
+
+app.get('/member', (req, res) => {
+    res.render("role", {role : "Membership", action : "Be a Member", link : "/member", error : false});
+})
+
+app.post('/member', async (req, res) => {
+    const { passcode } = req.body;
+    if(passcode == process.env.MEMBERSHIP_PASSCODE){
+        await queries.makeMember(req.user.id);
+        res.redirect('/');
+    }
+    else {
+        res.render("role", {role : "Membership", error : true, action : "Be a Member", link : "/member"})
+    }
+})
+
+app.post('/delete/:id', async (req, res) => {
+    await queries.deletePost(req.params.id);
+    res.redirect("/");
+})
+
 app.get('/', async (req, res) => {
     const posts = await queries.getPosts();
     res.render("home", {posts : posts});

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= action %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav>
+        <a href="/" class="nav-b">Back</a>
+    </nav>
+    <form class="form" action="<%=link%>" method="POST">
+        <div class="table">
+            <div>
+                <label for="passcode"><%=role%> Passcode:</label>
+                <input name="passcode" type="password" id="passcode">
+            </div>
+        </div>
+        <button type="submit" class="form-b"><%=action%></button>
+        <% if(error){ %>
+            <div class="error"> Passcode is not correct. </div>
+        <% } %>
+    </form>
+</body>
+</html>
