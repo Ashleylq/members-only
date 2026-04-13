@@ -47,20 +47,22 @@ app.post('/sign-up',
         body("lastname").trim()
         .isAlpha().withMessage("Names should only contain alphabets."),
         body("username").trim()
-        .isLength({min : 5})
+        .isLength({min : 5, max : 20}).withMessage("Username should have characters between 5 to 20.")
         .custom(async username => {
             const user = await queries.findByUsername(username);
             if(user){
                 throw new Error("Username already exists.")
             }
+            return true;
         }),
         body("password").trim()
-        .isLength({min : 5}),
+        .isLength({min : 5, max : 20}).withMessage("Password should have characters between 5 to 20."),
         body("confirmPassword").trim()
         .custom((value, {req}) => {
             if(value != req.body.password){
                 throw new Error("Passwords should match.")
             }
+            return true;
         })
     ],
     async (req, res) => {
@@ -71,8 +73,15 @@ app.post('/sign-up',
             const { firstname, lastname, username, password } = req.body;
             const hashedpassword = await bcrypt.hash(password, 10);
             await queries.createUser(firstname, lastname, username, hashedpassword);
-            req.login();
-            res.redirect('/');
+            const user = await queries.findByUsername(username);
+            req.login(user, (err) => {
+                if(err){
+                    throw(err);
+                }
+                else {
+                    return res.redirect('/');
+                }
+            });
         }
 })
 
