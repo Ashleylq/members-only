@@ -5,7 +5,6 @@ const path = require("node:path");
 const bcrypt = require("bcryptjs")
 const passport = require("./config/passportConfig");
 const queries = require("./database/queries");
-const { error } = require("node:console");
 require("dotenv").config();
 
 const app = express();
@@ -22,6 +21,11 @@ app.use(passport.session());
 app.use(express.urlencoded({extended : false}));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use((req, res, next) => {
+    res.locals.user = req.user;
+    next();
+})
+
 app.get('/sign-up', (req, res) => {
     res.render("sign-up", {errors : null});
 })
@@ -37,7 +41,7 @@ app.post('/sign-up',
         .custom(async username => {
             const user = await queries.findByUsername(username);
             if(user){
-                throw new error("Username already exists.")
+                throw new Error("Username already exists.")
             }
         }),
         body("password").trim()
@@ -45,7 +49,7 @@ app.post('/sign-up',
         body("confirmPassword").trim()
         .custom((value, {req}) => {
             if(value != req.body.password){
-                throw new error("Passwords should match.")
+                throw new Error("Passwords should match.")
             }
         })
     ],
@@ -63,22 +67,23 @@ app.post('/sign-up',
 })
 
 app.get('/login', (req, res) => {
-    res.render("login", {error : null});
+    res.render("login", {error : req.session.messages})
+    req.session.messages = [];
 })
 
-app.post('/login', (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
+app.post('/login', passport.authenticate("local", {
+    successRedirect : '/', 
+    failureRedirect : '/login', 
+    failureMessage : true
+}))
+
+app.get('/logout', (req, res) => {
+    req.logout((err) => {
         if(err){
-           throw(err);
+            throw(err);
         }
-        if(!user){
-            res.render('login', {error : [info.message]})
-        }
-        else{
-            req.login(user, next)
-            res.redirect('/')
-        }
-})(req, res, next);
+    });
+    res.redirect('/');
 })
 
 app.get('/', (req, res) => {

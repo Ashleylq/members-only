@@ -33,6 +33,27 @@ h1 {
     width : max-content;
 }
 
+nav {
+    background-color : #67429c;
+    display : flex;
+    justify-content: space-around;
+    width : 40%;
+    border-radius : 10px;
+    margin : 10px auto;
+    padding : 5px;
+}
+
+a {
+    text-decoration : none;
+}
+
+.nav-b {
+    display : block;
+    padding : 5px;
+    background-color : #9269c7;
+    border-radius : 5px;
+}
+
 .table > div {
     margin-bottom : 10px;
     display : table-row;

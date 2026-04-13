@@ -7,6 +7,22 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-
+    <nav>
+        <% if(user){ %>
+            <a class="nav-b">Create Post</a>
+            <a class="nav-b" href="/logout">Logout</a>
+            <% if(!user.isAdmin){ %>
+                <a class="nav-b">Be an Admin</a>
+            <% } %>
+            <% if(!user.isMember){ %>
+                <a class="nav-b">Be a Member</a>
+            <% } %>
+        <% } %>
+        <% if(!user){ %>
+            <a class="nav-b" href="/login">Login</a>
+            <a class="nav-b" href="/sign-up">Sign Up</a>
+        <% } %>
+    </nav>
+    <h1>Very Very Secret Club</h1>
 </body>
 </html>

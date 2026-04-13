@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+    <nav>
+        <a href="/" class="nav-b">Back</a>
+    </nav>
     <h1>Very Very Secret Club</h1>
     <form action="/login" method="POST">
         <div class="table">
@@ -21,7 +24,7 @@
         </div>
         <button class="form-b" type="submit">Login</button>
         <% if(error){ %>
-            <div class="error"><%= error %></div>
+            <div class="error"><%= error[0] %></div>
         <% } %>
     </form>
 </body>
