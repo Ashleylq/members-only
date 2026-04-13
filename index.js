@@ -2,9 +2,11 @@ const express = require("express");
 const session = require("express-session");
 const { body, validationResult } = require("express-validator")
 const path = require("node:path");
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
+const pgSession = require("connect-pg-simple")(session)
 const passport = require("./config/passportConfig");
 const queries = require("./database/queries");
+const pool = require("./database/pool")
 require("dotenv").config();
 
 const app = express();
@@ -13,11 +15,15 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(session({
+    store : new pgSession({
+        pool : pool,
+        createTableIfMissing : true
+    }),
     secret : process.env.SESSION_SECRET,
     resave : false,
     saveUninitialized : false,
     cookie : {
-        maxAge : 1000 * 60 * 60 *24
+        maxAge : 1000 * 60 * 60 * 24
     }
 }));
 app.use(passport.initialize())
